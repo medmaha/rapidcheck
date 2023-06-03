@@ -1,1 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* @import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/material'; */
+
+@layer components {
+
+
+    body {
+        color: #fff;
+        background-color: #212121;
+    }
+
+    .bg {
+        @apply bg-gray-600;
+        color: hsl(215, 14%, 34%)
+    }
+
+
+    .bg-highlight {
+        @apply bg-[#212121]
+    }
+
+    .bg-highlight-light {
+        @apply bg-[#262626]
+    }
+}

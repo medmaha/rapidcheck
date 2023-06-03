@@ -1,0 +1,17 @@
+.tabs {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    scrollbar-width: 0;
+}
+
+.tabs::-webkit-scrollbar {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+@supports (scrollbar-color: #5a5858 #09090f9d) {
+    .tabs {
+        scrollbar-width: none;
+    }
+}

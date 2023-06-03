@@ -1,0 +1,8 @@
+.CodeMirror {
+    background-color: #f2f2f2;
+}
+
+/* Override CodeMirror text area background color */
+.CodeMirror textarea {
+    background-color: #f2f2f2;
+}

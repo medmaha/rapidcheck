@@ -1,0 +1,29 @@
+<div class="block p-2 bg-muted">
+    <h2 *ngIf="!response" class="font-semibold text-lg px-6 opacity-90">
+        Response
+    </h2>
+    <div
+        *ngIf="response"
+        class="flex justify-between gap-4 px-2 sm:px-4 opacity-90"
+    >
+        <div class="flex gap-4 sm:gap-6 items-center">
+            <div class="status flex">Body</div>
+            <div class="status flex">Cookies</div>
+            <div class="status flex">Headers</div>
+        </div>
+        <div class="flex gap-4 sm:gap-6 items-center">
+            <div class="status flex gap-2 items-center">
+                <p class="text-sm">Status:</p>
+                <p class="text-xs text-green-400">200 Ok</p>
+            </div>
+            <div class="status flex gap-2 items-center">
+                <p class="text-sm">Time:</p>
+                <p class="text-xs text-green-400">980 ms</p>
+            </div>
+            <div class="status flex gap-2 items-center">
+                <p class="text-sm">Size:</p>
+                <p class="text-xs text-green-400">75.4 KB</p>
+            </div>
+        </div>
+    </div>
+</div>

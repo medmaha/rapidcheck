@@ -1,0 +1,57 @@
+<div
+    class="flex app-header bg-highlight gap-2 items-center border-t border-gray-600 h-max"
+>
+    <div
+        class="flex tabs flex-grow flex-shrink-0 max-h-[40px] border-x border-gray-600 items-center"
+    >
+        <div
+            *ngFor="let tab of collection.tabs.reverse(); let i = index"
+            class="flex-1 max-w-[200px]"
+        >
+            <app-tab
+                class=""
+                [idx]="i"
+                [tab]="tab"
+                [isLast]="!collection.tabs[i + 1]"
+                (tabClicked)="handleTabClick(tab)"
+                (closeTab)="handleTabClose($event)"
+            >
+            </app-tab>
+        </div>
+    </div>
+    <div class="flex gap-2 min-w-[100px]">
+        <div class="add-tab flex h-full items-center w-max">
+            <button
+                (click)="addTab()"
+                class="inline-flex justify-center items-center bg-highlight hover:bg-highlight-light w-8 h-8 rounded-md font-semibold transition"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+            </button>
+        </div>
+        <div class="add-tab flex h-full items-center">
+            <button
+                class="inline-flex justify-center items-center bg-highlight hover:bg-highlight-light w-8 h-8 rounded-md font-semibold transition"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 18 18"
+                >
+                    <path
+                        d="M4 7.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5S5.5 9.83 5.5 9 4.83 7.5 4 7.5zm10 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5S9.83 7.5 9 7.5z"
+                    />
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>

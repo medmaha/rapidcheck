@@ -1,0 +1,24 @@
+.tab {
+    position: relative;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 100%;
+    transform: translateY(50%);
+    width: 100%;
+    height: 3px;
+    background-color: rgb(28, 175, 28);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.r-payload {
+    display: hidden;
+}
+
+.r-payload.active {
+    display: block;
+}

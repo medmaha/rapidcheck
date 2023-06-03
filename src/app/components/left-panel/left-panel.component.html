@@ -1,0 +1,53 @@
+<div
+    class="bg-muted dark:bg-muted-dim h-[calc(100vh-1px)] overflow-hidden sticky top-1 flex flex-col max-w-[300px]"
+>
+    <span *ngIf="fullSpace">
+        <div
+            class="w-full flex-1 h-[calc(100vh-1px)] overflow-hidden sticky top-1 flex flex-col max-w-[300px]"
+        >
+            <div class="w-full h-full flex-1">
+                <h1
+                    class="sm:text-2xl mb-4 text-xl font-extrabold tracking-wider text-center bg-muted-dimmer dark:bg-muted-dark-dimer p-4 border-b border-b-muted-dimer dark:border-b-muted-dark-dimer"
+                >
+                    RapidCheck
+                </h1>
+                <app-history class="w-full"></app-history>
+                <app-collections class="w-full"></app-collections>
+            </div>
+
+            <footer class="block bg-muted-dimmer dark:bg-muted-dark-dimer p-4">
+                <div class="flex justify-center">
+                    <p
+                        class="text-center font-semibold text-lg tracking-wide opacity-75"
+                    >
+                        Copyright &copy; {{ thisYear }}
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </span>
+
+    <div *ngIf="!fullSpace" class="w-full h-full p-1 block">
+        <div class="flex flex-col gap-4 items-center w-full pt-4">
+            <div class="">
+                <button
+                    (click)="toggleSpace()"
+                    class="hover:text-sky-100 group: transition"
+                    title="Main Menu"
+                >
+                    <svg
+                        class="fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="36"
+                        height="36"
+                        viewBox="0 0 36 36"
+                    >
+                        <path
+                            d="M4 27h28v-3H4v3zm0-8h28v-3H4v3zM4 8v3h28V8H4z"
+                        />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<div class="p-2 pb-0">
+    <form (submit)="handleRequest($event)" class="px-2 flex gap-2">
+        <div
+            class="inline-flex gap-2 items-center w-full px-2 outline-1 outline outline-gray-600 rounded-md"
+        >
+            <select required name="method" class="bg-highlight">
+                <option value="{{ activeTab.payload.method }}" selected>
+                    {{ activeTab.payload.method }}
+                </option>
+                <option
+                    value="GET"
+                    [class.hidden]="activeTab.payload.method === 'get'"
+                >
+                    GET
+                </option>
+                <option
+                    value="POST"
+                    [class.hidden]="activeTab.payload.method === 'post'"
+                >
+                    POST
+                </option>
+                <option
+                    value="PUT"
+                    [class.hidden]="activeTab.payload.method === 'put'"
+                >
+                    PUT
+                </option>
+                <option
+                    value="PATCH"
+                    [class.hidden]="activeTab.payload.method === 'patch'"
+                >
+                    PATCH
+                </option>
+                <option
+                    value="DELETE"
+                    [class.hidden]="activeTab.payload.method === 'delete'"
+                >
+                    DELETE
+                </option>
+                <option
+                    value="OPTIONS"
+                    [class.hidden]="activeTab.payload.method === 'patch'"
+                >
+                    OPTIONS
+                </option>
+            </select>
+            <input
+                type="url"
+                [value]="activeTab.payload.url"
+                name="url"
+                required
+                class="bg-transparent text-lg leading-none tracking-wide w-full p-2 transition-[outline] delay-100 duration-300 border-0 outline-4 focus:border-0 outline outline-transparent z-[1] focus:outline-sky-500"
+                placeholder="Enter a url or paste text"
+            />
+        </div>
+        <div class="inline-flex items-center">
+            <button
+                type="submit"
+                class="p-2 text-black disabled:opacity-30 disabled:cursor-not-allowed px-4 font-semibold rounded-l-md bg-sky-500"
+            >
+                Send
+            </button>
+            <button
+                class="text-black text-opacity-80 hover:text-opacity-100 p-2 px-1 rounded-r-md border-l border-opacity-40 border-gray-600 inline-flex gap-1 justify-center items-center text-center transition-all bg-sky-500"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    class="opacity-70 transition group-hover:opacity-100"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+                </svg>
+            </button>
+        </div>
+    </form>
+</div>
+
+<app-request-payload class="px-4" id="requestPayload"></app-request-payload>

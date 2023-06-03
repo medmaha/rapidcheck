@@ -1,0 +1,126 @@
+<div class="payload-tabs px-4">
+    <div class="tabs flex items-center gap-4 sm:gap-8 lg:gap-10 text-gray-300">
+        <button
+            *ngFor="let tab of tabs; let i = index"
+            class="tracking-wider tab"
+            [class.active]="tab.active"
+            (click)="handleChangeTab(tab)"
+        >
+            {{ tab.name }}
+        </button>
+    </div>
+
+    <div
+        *ngFor="let tab of tabs; let i = index"
+        [class.hidden]="!tab.active"
+        class="pt-4"
+        [id]="tab.id"
+    >
+        <div class="title text-muted dark:text-muted-dark pb-2">
+            <p>{{ activeTab.title }}</p>
+        </div>
+
+        <div
+            class="wrapper ouline outline-muted-dim dark:outline-muted-dark-dim outline outline-1"
+        >
+            <div
+                [class.hidden]="!tab.active"
+                *ngFor="let _tab of tab.fields; let i = index"
+                class="flex items-center border-muted-dim dark:border-muted-dark-dim"
+                [class.border-b]="!!tab.fields[i + 1]"
+                data-key-value-pairs
+            >
+                <div
+                    data-index
+                    class="key flex flex-col w-max min-w-[50px] border-r border-muted-dim dark:border-muted-dark-dim"
+                >
+                    <span
+                        [class.hidden]="i !== 0"
+                        class="inline-block text-sm border-b border-muted-dim dark:border-muted-dark-dim px-1 text-center"
+                        >No:</span
+                    >
+                    <div
+                        class="inline-flex items-center justify-center h-full py-2 text-muted dark:text-muted-dark"
+                    >
+                        <span class="text-center px-1">{{ i + 1 }}</span>
+                    </div>
+                </div>
+                <div
+                    data-key
+                    class="key flex flex-col border-r border-muted-dim dark:border-muted-dark-dim flex-1 max-w-[350px]"
+                >
+                    <span
+                        [class.hidden]="i !== 0"
+                        class="inline-block text-sm border-b border-muted-dim dark:border-muted-dark-dim text-center px-1"
+                        >Key</span
+                    >
+                    <div class="inline-flex items-center h-full p-2 w-full">
+                        <input
+                            type="text"
+                            [value]="_tab.key"
+                            class="p-1 self-center"
+                            (input)="
+                                ngModelChange(activeTab.id, i, true, $event)
+                            "
+                            class="bg-transparent w-full focus:bg-muted-dim dark:focus:bg-muted-dark-dim px-1 focus:bottom-0 focus:outline-0"
+                            placeholder="key"
+                        />
+                    </div>
+                </div>
+
+                <div
+                    data-value
+                    class="key flex flex-col border-r border-muted-dim dark:border-muted-dark-dim flex-1 max-w-[350px]"
+                >
+                    <span
+                        [class.hidden]="i !== 0"
+                        class="inline-block text-sm border-b border-muted-dim dark:border-muted-dark-dim text-center px-1"
+                        >Value</span
+                    >
+                    <div class="inline-flex items-center h-full p-2 w-full">
+                        <input
+                            type="text"
+                            (input)="
+                                ngModelChange(activeTab.id, i, false, $event)
+                            "
+                            [value]="_tab.value"
+                            class="p-1 self-center"
+                            class="bg-transparent w-full focus:bg-muted-dim dark:focus:bg-muted-dark-dim px-1 focus:bottom-0 focus:outline-0"
+                            placeholder="Value"
+                        />
+                    </div>
+                </div>
+                <div
+                    class="key flex flex-col border-r border-muted-dim dark:border-muted-dark-dim flex-1 max-w-[350px]"
+                >
+                    <span
+                        [class.hidden]="i !== 0"
+                        class="inline-block text-sm border-b border-muted-dim dark:border-muted-dark-dim text-center px-1"
+                        >Description</span
+                    >
+                    <div class="inline-flex items-center h-full p-2 w-full">
+                        <input
+                            type="text"
+                            class="p-1 self-center"
+                            (input)="
+                                ngModelChange(activeTab.id, i, null, $event)
+                            "
+                            [value]="_tab.description || ''"
+                            class="bg-transparent w-full focus:bg-muted-dim dark:focus:bg-muted-dark-dim px-1 focus:bottom-0 focus:outline-0"
+                            placeholder="Description"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-4">
+            <button
+                class="bg-sky-500 rounded-full shadow px-4 py-2 font-semibold text-black opacity-90 hover:opacity-100"
+                (click)="addNewField()"
+            >
+                Add Field
+            </button>
+        </div>
+    </div>
+</div>

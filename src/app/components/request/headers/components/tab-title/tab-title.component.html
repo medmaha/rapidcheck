@@ -1,0 +1,62 @@
+<section class="p-2 py-4 flex justify-between items-center">
+    <div class="title flex gap-1 items-center">
+        <span
+            class="text-white pointer-events-none w-8 rounded-md shadow h-8 inline-flex justify-center items-center text-center bg-highlight"
+        >
+            <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="lightblue"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="m12.654.046-.707.707L13.593 2.4H0v1h16.007L12.654.046ZM-.007 12.599l3.353 3.353.707-.707L2.407 13.6H16v-1H-.007ZM.011 11.2h.977V8.478h2.327V11.2h.98V4.927h-.98V7.64H.988V4.927H.01V11.2ZM4.784 5.768H5.9V11.2h.973V5.768h.92v-.84h-3.01v.84ZM9.283 5.768h-.916v-.84h3.01v.84h-1.12V11.2h-.974V5.768Z"
+                ></path>
+                <path
+                    d="M11.87 11.2h.976V8.924h.927c1.501 0 2.244-.807 2.244-2.001 0-1.192-.736-1.996-2.24-1.996h-1.908V11.2Zm.976-3.104V5.765h.826c.967 0 1.362.424 1.362 1.158 0 .733-.395 1.173-1.35 1.173h-.838Z"
+                ></path>
+            </svg>
+        </span>
+        <p class="text-xl tracking-wide">{{ tab.name }}</p>
+    </div>
+    <div class="title flex gap-1 items-center">
+        <button
+            (click)="toggleSave()"
+            class="text-white p-2 rounded-md shadow inline-flex gap-1 justify-center items-center text-center bg-highlight-light hover:text-sky-500 transition-all"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
+                />
+            </svg>
+            <span class="text-current">Save</span>
+        </button>
+        <button
+            class="text-white p-2 rounded-md shadow inline-flex gap-1 justify-center items-center text-center bg-highlight-light transition-all relative"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                class="opacity-70 transition group-hover:opacity-100"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+            >
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+            </svg>
+        </button>
+    </div>
+</section>
+
+<!-- SAVE Modal -->
+
+<span *ngIf="save">
+    <app-save-request (closeSave)="toggleSave()"></app-save-request>
+</span>

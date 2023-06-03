@@ -1,0 +1,66 @@
+<div
+    class="z-[100] fixed top-0 left-0 w-full h-full block bg-black bg-opacity-50"
+>
+    <div class="relative w-full h-full block">
+        <div
+            style="transform: translate(-50%, -50%)"
+            class="absolute top-[50%] left-[50%]"
+        >
+            <div
+                class="block min-w-[300px] w-full rounded-md border border-muted-dim_ dark:border-muted-dark-dim_ max-w-[500px] p-6 bg-muted shadow-lg"
+            >
+                <form
+                    class="block w-full"
+                    (input)="handleFormChange($event)"
+                    (submit)="handleFormSubmit($event)"
+                >
+                    <h3
+                        class="text xl text-center font-semibold pb-6 tracking-wider"
+                    >
+                        Add/Save Collection
+                    </h3>
+                    <div
+                        class="flex flex-col w-full gap-1 max-w-[500px] min-w-[300px]"
+                    >
+                        <label for="for"
+                            >Collection Name
+                            <span
+                                title="required"
+                                class="text-red-500 text-sm pl-[2px]"
+                                >*</span
+                            ></label
+                        >
+                        <input
+                            id="r-collection"
+                            name="r-collection"
+                            required
+                            min="4"
+                            max="20"
+                            value="{{ collection.name }}"
+                            maxlength="20"
+                            minlength="4"
+                            type="text"
+                            placeholder="Give this collection a name"
+                            class="bg-highlight-light w-full text-lg p-2 py-4 rounded-md transition border-0 outline-1 focus:border-0 outline outline-gray-600 focus:outline-sky-500 focus:outline-2"
+                        />
+                    </div>
+                    <div class="block w-full pt-8">
+                        <button
+                            [disabled]="!isValidInput"
+                            class="w-full disabled:opacity-30 disabled:pointer-events-none block font-semibold dark:text-black text-center p-2 bg-sky-500 rounded-full"
+                        >
+                            Create
+                        </button>
+                        <button
+                            type="button"
+                            (click)="closeSave()"
+                            class="w-full font-semibold block text-center p-2 bg-muted-dark dark:bg-muted-dark rounded-full mt-4"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
