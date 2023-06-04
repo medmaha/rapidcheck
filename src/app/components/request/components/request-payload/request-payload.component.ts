@@ -30,7 +30,7 @@ export class RequestPayloadComponent implements OnInit, OnDestroy {
         this.subscription = this._mainService.collections.subscribe((value) => {
             this.currentRequestTab = this._mainService.getActiveRequestTab();
 
-            const { queryParams, queryString, headers } =
+            const { queryParams, queryString, headers, data } =
                 this.currentRequestTab.payload;
 
             function abstractData(_tab: Tab, data: { [key: string]: string }) {
@@ -49,6 +49,9 @@ export class RequestPayloadComponent implements OnInit, OnDestroy {
                         break sw;
                     case 'Query':
                         abstractData(_tab, queryString);
+                        break sw;
+                    case 'Body':
+                        if (data) abstractData(_tab, data);
                         break sw;
                     case 'Headers':
                         abstractData(_tab, headers);
@@ -73,6 +76,8 @@ export class RequestPayloadComponent implements OnInit, OnDestroy {
 
     switchActiveTab() {
         const activeTab = this.tabs.find((_tab) => _tab.active);
+
+        console.log(activeTab);
 
         if (activeTab) {
             activeTab.active = false;

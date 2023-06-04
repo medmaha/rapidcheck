@@ -107,7 +107,7 @@ export class MainService {
             const prev = tabs[tabIndex - 1];
             const next = tabs[tabIndex + 1];
 
-            if (prev || next) {
+            if (prev || (next && tab.active)) {
                 this.deactivateAllRequestTabs(collections);
                 if (prev) {
                     prev.active = true;
@@ -135,11 +135,19 @@ export class MainService {
                 (_tab) => _tab.id === tab.id
             )!;
 
-            if (activeCollection.tabs[tabInx])
-                activeCollection.tabs[tabInx] = tab;
-            else {
+            this.deactivateAllCollectionsAndRequests(collections);
+
+            tab.active = true;
+            activeCollection.active = true;
+
+            tab.updatedAt = Date.now().toString();
+
+            if (activeCollection.tabs[tabInx]) {
+                activeCollection.tabs[tabInx] = { ...tab };
+            } else {
                 activeCollection.tabs.unshift(tab);
             }
+            activeCollection.updatedAt = Date.now().toString();
 
             this.collections.next(collections);
             this.save(collections);

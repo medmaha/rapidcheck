@@ -6,7 +6,7 @@ import { RequestTab } from '../../models';
 // import { Methods } from '../../services/types';
 
 export function getMethodColor(method: string) {
-    switch (method) {
+    switch (method.toLowerCase()) {
         case 'post':
             return 'text-green-500 text-opacity-90';
         case 'get':
@@ -46,7 +46,7 @@ export function getDummyRequestTab({
             queryString: {},
             queryParams: {},
             status_code: '',
-            body: {},
+            data: {},
         },
     };
 }

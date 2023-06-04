@@ -15,6 +15,7 @@ export class EditorComponent implements OnInit {
     language: 'javascript' | 'xml' = 'javascript';
 
     @Input() content = '' as string;
+
     editor: CodeMirror.EditorFromTextArea | null = null;
 
     constructor(private _responseService: ResponseService) {}

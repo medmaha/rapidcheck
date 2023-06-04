@@ -1,12 +1,90 @@
 import { Injectable } from '@angular/core';
-import { CollectionArray, RequestTab } from '../models';
 import { BehaviorSubject } from 'rxjs';
+import { AxiosError, AxiosResponse } from 'axios';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ResponseService {
     constructor() {}
+    data = new BehaviorSubject('\n\n');
+    meta = new BehaviorSubject({} as Meta);
+    loading = new BehaviorSubject(false);
 
-    data = new BehaviorSubject('');
+    update(data: any) {
+        this.abstractResponse(data);
+    }
+
+    async abstractResponse(res: AxiosError | AxiosResponse) {
+        if (res instanceof AxiosError) {
+            const { response, request, message } = res;
+            if (response) {
+                this.dispatchMetaData(response, false);
+            } else if (request) {
+                const status = request.status || 406;
+                const statusText = 'Bad Format';
+                console.log(message);
+            }
+        } else {
+            this.dispatchMetaData(res);
+        }
+    }
+    dispatchMetaData(payload: any, success = true) {
+        const { data, config, status, statusText, headers } = payload;
+        const meta = {} as Meta;
+        this.data.next(data);
+
+        meta.data = data;
+        meta.requested = true;
+        meta.success = success;
+        // @ts-ignore
+        meta.time = this.getResponseTime(payload.duration || 0);
+        meta.size = this.getResponseSize(JSON.stringify(data));
+        meta.status = this.getResponseStatus(status, statusText);
+        meta.header = {
+            ...config.headers,
+            ...headers,
+        };
+
+        this.meta.next(meta);
+    }
+
+    getResponseSize(data: string) {
+        let bytes = 0;
+
+        const itr = data.split('');
+
+        itr.forEach(() => bytes++);
+
+        if (bytes > 100) {
+            const kb = `${(bytes / 1000).toFixed(1)} kb`;
+
+            return kb;
+        }
+        const kb = `${bytes} bytes`;
+
+        return kb;
+    }
+    getResponseTime(duration: number) {
+        const ms = `${duration} ms`;
+
+        return ms;
+    }
+    getResponseStatus(status: number, text: string) {
+        const _status = `${status} ${text}`;
+
+        return _status;
+    }
 }
+
+interface Meta {
+    requested: boolean;
+    success: boolean;
+    status: string;
+    data: any;
+    time: string;
+    size: string;
+    header: KeyValuePair;
+}
+
+type KeyValuePair = { [key: string]: string };

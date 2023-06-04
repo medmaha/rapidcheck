@@ -25,9 +25,9 @@ export class AppComponent implements OnInit {
     }
 
     changePanelSize() {
-        const open = this.fullSpace || true;
+        const open = this.fullSpace;
         if (open) {
-            this.leftPanelSize = 'grid-cols-[300px,1fr]';
+            this.leftPanelSize = 'grid-cols-[250px,1fr]';
         } else this.leftPanelSize = 'grid-cols-[60px,1fr]';
     }
 }

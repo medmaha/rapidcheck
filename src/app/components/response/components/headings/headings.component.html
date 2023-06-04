@@ -1,9 +1,26 @@
 <div class="block p-2 bg-muted">
-    <h2 *ngIf="!response" class="font-semibold text-lg px-6 opacity-90">
+    <h2 *ngIf="!requested" class="font-semibold text-lg px-6 opacity-90">
         Response
     </h2>
+    <div *ngIf="!requested" class="absolute top-0 left-0 w-full h-full z-50">
+        <div class="flex justify-center pt-[100px] dark:opacity-60">
+            <img
+                src="/assets/api-logo.png"
+                alt="api-logo"
+                class="w-[150px] h-[150px] rounded-md shadow-md"
+            />
+        </div>
+        <p
+            class="text center font-semibold text-lg text-center tracking-wider pt-6 dark:opacity-60"
+        >
+            Rapid Check Your Api
+        </p>
+        <p class="text-sm text-center dark:opacity-60" id="">
+            Get started by sending a api request
+        </p>
+    </div>
     <div
-        *ngIf="response"
+        *ngIf="requested"
         class="flex justify-between gap-4 px-2 sm:px-4 opacity-90"
     >
         <div class="flex gap-4 sm:gap-6 items-center">
@@ -14,15 +31,30 @@
         <div class="flex gap-4 sm:gap-6 items-center">
             <div class="status flex gap-2 items-center">
                 <p class="text-sm">Status:</p>
-                <p class="text-xs text-green-400">200 Ok</p>
+                <p
+                    [class.text-red-400]="!metadata.success"
+                    class="text-xs text-green-400"
+                >
+                    {{ metadata.status }}
+                </p>
             </div>
             <div class="status flex gap-2 items-center">
                 <p class="text-sm">Time:</p>
-                <p class="text-xs text-green-400">980 ms</p>
+                <p
+                    [class.text-red-400]="!metadata.success"
+                    class="text-xs text-green-400"
+                >
+                    {{ metadata.time }}
+                </p>
             </div>
             <div class="status flex gap-2 items-center">
                 <p class="text-sm">Size:</p>
-                <p class="text-xs text-green-400">75.4 KB</p>
+                <p
+                    [class.text-red-400]="!metadata.success"
+                    class="text-xs text-green-400"
+                >
+                    {{ metadata.size }}
+                </p>
             </div>
         </div>
     </div>

@@ -9,10 +9,10 @@
 
 @layer components {
 
-
     body {
         color: #fff;
         background-color: #212121;
+        overflow-x: hidden
     }
 
     .bg {

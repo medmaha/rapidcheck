@@ -16,7 +16,7 @@ export interface RequestTab {
         headers: KeyValuePair;
         queryString: KeyValuePair;
         queryParams: KeyValuePair;
-        body?: KeyValuePair | string;
+        data?: KeyValuePair;
         status_code: string;
     };
 }

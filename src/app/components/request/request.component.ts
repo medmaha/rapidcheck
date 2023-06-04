@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { ResponseService } from '../../services/response.service';
 import { MainService } from '../../services/main.service';
 import { RequestTab } from '../../models';
+import { AxiosError, AxiosResponse } from 'axios';
 
 @Component({
     selector: 'app-request',
@@ -12,6 +13,7 @@ import { RequestTab } from '../../models';
 })
 export class RequestComponent implements OnInit, OnDestroy {
     activeTab = {} as RequestTab;
+    loading = false;
 
     private subscription: Subscription | undefined;
 
@@ -31,9 +33,9 @@ export class RequestComponent implements OnInit, OnDestroy {
         this.subscription?.unsubscribe();
     }
 
-    getParams(container: HTMLDivElement) {
-        const paramsElement = container.querySelector('#r-params')!;
-        const keyValueWrapper = paramsElement.querySelectorAll(
+    getFieldValues(containerId: string, wrapper: HTMLDivElement) {
+        const element = wrapper.querySelector(containerId)!;
+        const keyValueWrapper = element.querySelectorAll(
             '[data-key-value-pairs]'
         );
         const data = {} as { [key: string]: any };
@@ -48,74 +50,30 @@ export class RequestComponent implements OnInit, OnDestroy {
                 data[key] = value;
             }
         });
-
         return data;
+    }
+
+    getParams(container: HTMLDivElement) {
+        return this.getFieldValues('#r-params', container);
     }
     getQuery(container: HTMLDivElement) {
-        const paramsElement = container.querySelector('#r-query')!;
-        const keyValueWrapper = paramsElement.querySelectorAll(
-            '[data-key-value-pairs]'
-        );
-        const data = {} as { [key: string]: any };
-        keyValueWrapper.forEach((pair) => {
-            const key = pair.querySelector('[data-key]')?.querySelector('input')
-                ?.value as string;
-            const value = pair
-                .querySelector('[data-value]')
-                ?.querySelector('input')?.value as string;
-
-            if (key) {
-                data[key] = value;
-            }
-        });
-
-        return data;
+        return this.getFieldValues('#r-query', container);
     }
     getBody(container: HTMLDivElement) {
-        const paramsElement = container.querySelector('#r-body')!;
-        const keyValueWrapper = paramsElement.querySelectorAll(
-            '[data-key-value-pairs]'
-        );
-        const data = {} as { [key: string]: any };
-        keyValueWrapper.forEach((pair) => {
-            const key = pair.querySelector('[data-key]')?.querySelector('input')
-                ?.value as string;
-            const value = pair
-                .querySelector('[data-value]')
-                ?.querySelector('input')?.value as string;
-
-            if (key) {
-                data[key] = value;
-            }
-        });
-
-        return data;
+        return this.getFieldValues('#r-body .formData', container);
     }
 
     getHeaders(container: HTMLDivElement) {
-        const paramsElement = container.querySelector('#r-headers')!;
-        const keyValueWrapper = paramsElement.querySelectorAll(
-            '[data-key-value-pairs]'
-        );
-        const data = {} as { [key: string]: any };
-        keyValueWrapper.forEach((pair) => {
-            const key = pair.querySelector('[data-key]')?.querySelector('input')
-                ?.value as string;
-            const value = pair
-                .querySelector('[data-value]')
-                ?.querySelector('input')?.value as string;
-
-            if (key) {
-                data[key] = value;
-            }
-        });
-
-        return data;
+        return this.getFieldValues('#r-headers', container);
     }
 
     handleRequest(event: Event) {
         event.preventDefault();
         const formElement = event.currentTarget as HTMLFormElement;
+        if (!formElement.checkValidity()) return;
+
+        this.loading = true;
+        this._responseService.loading.next(true);
         const form = new FormData(formElement);
 
         const payloadsElement = document.getElementById(
@@ -128,6 +86,7 @@ export class RequestComponent implements OnInit, OnDestroy {
             headers: this.getHeaders(payloadsElement),
             queryParams: this.getParams(payloadsElement),
             queryString: this.getQuery(payloadsElement),
+            data: this.getBody(payloadsElement),
         } as RequestTab['payload'];
 
         this.saveRequest(requestPayload);
@@ -148,14 +107,9 @@ export class RequestComponent implements OnInit, OnDestroy {
     }
     async makeRequest(payload: RequestTab['payload']) {
         const res = await this._requestService.send(payload);
-
-        const { data, status, headers, request, config, statusText } = res;
-
-        console.log(res);
-
-        if (data) {
-            this._responseService.data.next(data);
-        }
+        this.loading = false;
+        this._responseService.loading.next(false);
+        this._responseService.update(res);
     }
 }
 
