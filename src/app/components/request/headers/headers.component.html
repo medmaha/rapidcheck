@@ -19,11 +19,11 @@
             </app-tab>
         </div>
     </div>
-    <div class="flex gap-2 min-w-[100px]">
+    <div class="flex gap-2 min-w-[100px] justify-evenly">
         <div class="add-tab flex h-full items-center w-max">
             <button
                 (click)="addTab()"
-                class="inline-flex justify-center items-center bg-muted hover:bg-muted-dim w-8 h-8 rounded-md font-semibold transition"
+                class="inline-flex justify-center items-center bg-transparent dark:hover:bg-muted-dark-dim hover:bg-muted-dim w-8 h-8 rounded-md font-semibold transition"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -38,18 +38,34 @@
         </div>
         <div class="add-tab flex h-full items-center">
             <button
+                title="{{ darkTheme ? 'Light Mood' : 'Night Mood' }}"
                 (click)="toggleTheme()"
-                class="inline-flex justify-center items-center bg-highlight hover:bg-highlight-light w-8 h-8 rounded-md font-semibold transition"
+                class="inline-flex justify-center items-center bg-transparent dark:hover:bg-muted-dark-dim hover:bg-muted-dim w-8 h-8 rounded-md font-semibold transition"
             >
                 <svg
+                    *ngIf="!darkTheme"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    height="20px"
+                    viewBox="0 0 24 24"
+                    width="20px"
                     fill="currentColor"
-                    viewBox="0 0 18 18"
+                >
+                    <rect fill="none" height="24" width="24" />
+                    <path
+                        d="M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26 c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"
+                    />
+                </svg>
+
+                <svg
+                    *ngIf="darkTheme"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
                 >
                     <path
-                        d="M4 7.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5S5.5 9.83 5.5 9 4.83 7.5 4 7.5zm10 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5S9.83 7.5 9 7.5z"
+                        d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"
                     />
                 </svg>
             </button>

@@ -13,7 +13,8 @@ export class HeadersComponent implements OnInit, OnDestroy {
     collection = {} as Collection;
 
     timeout: any | undefined;
-    private subscription: Subscription | undefined;
+    darkTheme = false;
+    private subscription: Subscription[] | undefined;
 
     constructor(private _mainService: MainService) {}
 
@@ -22,15 +23,19 @@ export class HeadersComponent implements OnInit, OnDestroy {
             'dark',
             localStorage.getItem('theme') === 'dark'
         );
-        this.subscription = this._mainService.collections.subscribe(
+        this.subscription = [];
+        this.subscription[0] = this._mainService.collections.subscribe(
             (collections) => {
                 this.collection = collections.find((col: any) => col.active)!;
             }
         );
+        this.subscription[1] = this._mainService.theme.subscribe((theme) => {
+            this.darkTheme = theme === 'dark';
+        });
     }
 
     ngOnDestroy(): void {
-        this.subscription?.unsubscribe();
+        this.subscription?.forEach((s) => s.unsubscribe());
     }
 
     addTab() {
@@ -64,10 +69,16 @@ export class HeadersComponent implements OnInit, OnDestroy {
     }
 
     toggleTheme() {
-        document.body.classList.toggle('dark');
-        localStorage.setItem(
-            'theme',
-            document.body.classList.contains('dark') ? 'dark' : 'light'
-        );
+        const isDark = document.body.classList.contains('dark');
+        let theme: 'light' | 'dark' = 'light';
+        if (isDark) {
+            document.body.classList.remove('dark');
+            localStorage.setItem('theme', '');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            theme = 'dark';
+        }
+        this._mainService.theme.next(theme);
     }
 }

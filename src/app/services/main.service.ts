@@ -13,6 +13,8 @@ export class MainService {
 
     collections = new BehaviorSubject([] as CollectionArray);
 
+    theme = new BehaviorSubject('light');
+
     private COLLECTION_BUCKET_STRING = 'collections';
 
     init() {

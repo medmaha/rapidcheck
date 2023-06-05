@@ -17,6 +17,13 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         this._mainService.init();
         this.changePanelSize();
+
+        const darkTheme = localStorage.getItem('theme') === 'dark';
+
+        if (darkTheme) {
+            this._mainService.theme.next('dark');
+            document.body.classList.add('dark');
+        }
     }
 
     toggleLeftPanel(open: boolean) {

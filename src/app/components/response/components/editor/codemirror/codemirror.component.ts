@@ -4,21 +4,27 @@ import {
     ElementRef,
     Input,
     OnChanges,
+    OnDestroy,
     OnInit,
     ViewChild,
 } from '@angular/core';
 import * as CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/xml/xml';
+import { Subscription } from 'rxjs';
+import { MainService } from '../../../../../services/main.service';
 
 @Component({
     selector: 'app-codemirror',
     templateUrl: './codemirror.component.html',
     styleUrls: ['./codemirror.component.css'],
 })
-export class CodemirrorComponent implements AfterViewInit {
+export class CodemirrorComponent implements AfterViewInit, OnDestroy {
     @ViewChild('textarea') textarea!: ElementRef;
     editor!: CodeMirror.Editor;
+    subscription: Subscription | undefined;
+
+    constructor(private _mainService: MainService) {}
 
     init() {
         this.editor = CodeMirror.fromTextArea(this.textarea.nativeElement, {
@@ -29,8 +35,25 @@ export class CodemirrorComponent implements AfterViewInit {
         });
     }
 
+    ngOnDestroy(): void {
+        this.subscription?.unsubscribe();
+    }
+
     ngAfterViewInit(): void {
         this.init();
+        this.subscription = this._mainService.theme.subscribe((t) => {
+            console.log(t);
+            switch (t) {
+                case 'light':
+                    this.setEditorTheme('eclipse');
+                    break;
+                case 'dark':
+                    this.setEditorTheme('ayu-dark');
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     setEditorContent(content: string, language: string): void {

@@ -1,48 +1,56 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CodemirrorComponent } from './codemirror/codemirror.component';
 import * as CodeMirror from 'codemirror';
 import { ResponseService } from '../../../../services/response.service';
+import { Subscription } from 'rxjs';
+import { MainService } from '../../../../services/main.service';
 
 @Component({
     selector: 'app-editor',
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.css'],
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
     @ViewChild('cmEditor') cmEditor!: CodemirrorComponent;
 
     theme: 'ayu-dark' | 'eclipse' = 'eclipse';
     language: 'javascript' | 'xml' = 'javascript';
-
+    subscriptions: Subscription[] | undefined;
     @Input() content = '' as string;
 
     editor: CodeMirror.EditorFromTextArea | null = null;
 
-    constructor(private _responseService: ResponseService) {}
+    constructor(
+        private _responseService: ResponseService,
+        private _mainService: MainService
+    ) {}
 
     ngOnInit(): void {
-        console.log(document.body.classList.contains('.dark'));
-        if (document.body.classList.contains('dark')) {
-            this.theme = 'ayu-dark';
-        } else {
-            this.theme = 'eclipse';
-        }
+        this.subscriptions = [];
 
-        this._responseService.data.subscribe((value) => {
-            if (typeof value === 'string') {
-                this.content = value;
-                this.language = 'xml';
-            } else {
-                this.language = 'javascript';
-                this.content = JSON.stringify(value, null, 2);
+        this.subscriptions[0] = this._responseService.data.subscribe(
+            (value) => {
+                if (typeof value === 'string') {
+                    this.content = value;
+                    this.language = 'xml';
+                } else {
+                    this.language = 'javascript';
+                    this.content = JSON.stringify(value, null, 2);
+                }
+                this.updateResponseContent();
             }
-            this.updateResponseContent();
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions?.forEach((s) => {
+            s?.unsubscribe();
         });
     }
 
     ngAfterViewInit(): void {
-        this.cmEditor.setEditorTheme(this.theme);
         this.updateResponseContent();
+        this.subscriptions = this.subscriptions || [];
     }
 
     updateResponseContent() {
