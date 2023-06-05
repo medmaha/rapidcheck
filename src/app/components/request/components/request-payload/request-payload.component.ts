@@ -102,7 +102,7 @@ export class RequestPayloadComponent implements OnInit, OnDestroy {
 }
 
 function newFields(active = false): Field {
-    return {};
+    return { key: '', value: '', description: '' };
 }
 
 type Field = { key?: string; value?: string; description?: string };

@@ -70,7 +70,10 @@ export class RequestComponent implements OnInit, OnDestroy {
     handleRequest(event: Event) {
         event.preventDefault();
         const formElement = event.currentTarget as HTMLFormElement;
-        if (!formElement.checkValidity()) return;
+        if (!formElement.checkValidity()) {
+            formElement.reportValidity();
+            return;
+        }
 
         this.loading = true;
         this._responseService.loading.next(true);
@@ -108,6 +111,7 @@ export class RequestComponent implements OnInit, OnDestroy {
     async makeRequest(payload: RequestTab['payload']) {
         const res = await this._requestService.send(payload);
         this.loading = false;
+
         this._responseService.loading.next(false);
         this._responseService.update(res);
     }

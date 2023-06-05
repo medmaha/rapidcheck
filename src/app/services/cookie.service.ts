@@ -29,7 +29,8 @@ export class CookiesService {
     });
 
     get({ name }: GetInterface): string | any | null {
-        let value = this.COOKIES.get(name);
+        // let value = this.COOKIES.get(name);
+        let value = localStorage.getItem(name);
 
         if (value) {
             try {
@@ -42,10 +43,12 @@ export class CookiesService {
     }
 
     add({ name, record, options }: AddInterface) {
-        this.COOKIES.set(name, record, options);
+        // this.COOKIES.set(name, record, options);
+        localStorage.setItem(name, record);
     }
 
     remove({ name, options }: { name: string; options: IAttributes }) {
-        this.COOKIES.remove(name, options);
+        // this.COOKIES.remove(name, options);
+        localStorage.removeItem(name);
     }
 }

@@ -1,8 +1,8 @@
 <div
-    class="flex app-header bg-highlight gap-2 items-center border-t border-gray-600 h-max"
+    class="flex app-header bg-highlight gap-2 items-center border-t-2 border-b dark:border-t border-gray-600 h-max"
 >
     <div
-        class="flex tabs flex-grow flex-shrink-0 max-h-[40px] border-x border-gray-600 items-center"
+        class="flex tabs flex-grow flex-shrink-0 max-h-[40px] dark:border-x border-r border-gray-600 items-center"
     >
         <div
             *ngFor="let tab of collection.tabs.reverse(); let i = index"
@@ -23,7 +23,7 @@
         <div class="add-tab flex h-full items-center w-max">
             <button
                 (click)="addTab()"
-                class="inline-flex justify-center items-center bg-highlight hover:bg-highlight-light w-8 h-8 rounded-md font-semibold transition"
+                class="inline-flex justify-center items-center bg-muted hover:bg-muted-dim w-8 h-8 rounded-md font-semibold transition"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -38,6 +38,7 @@
         </div>
         <div class="add-tab flex h-full items-center">
             <button
+                (click)="toggleTheme()"
                 class="inline-flex justify-center items-center bg-highlight hover:bg-highlight-light w-8 h-8 rounded-md font-semibold transition"
             >
                 <svg

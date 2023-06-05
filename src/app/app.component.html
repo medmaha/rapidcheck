@@ -1,7 +1,8 @@
-<div class="py-1_ min-h-[99vh] min-w-[99vw]">
+<div class="min-h-[100vh] min-w-[99vw]">
     <div class="grid {{ leftPanelSize }} h-full">
         <div class="w-full h-full">
             <app-left-panel
+                style="resize: horizontal"
                 class="h-full w-full"
                 (togglePanel)="toggleLeftPanel($event)"
                 [fullSpace]="fullSpace"
@@ -11,7 +12,7 @@
             <app-headers></app-headers>
             <app-tab-title></app-tab-title>
             <app-request></app-request>
-            <app-response></app-response>
+            <app-response [fullscreen]="fullSpace"></app-response>
         </div>
     </div>
 </div>

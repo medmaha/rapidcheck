@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AxiosError, AxiosResponse } from 'axios';
+import { MainService } from './main.service';
+import { RequestService } from './request.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ResponseService {
-    constructor() {}
+    constructor(
+        private _mainService: MainService,
+        private _requestService: RequestService
+    ) {}
     data = new BehaviorSubject('\n\n');
     meta = new BehaviorSubject({} as Meta);
     loading = new BehaviorSubject(false);
@@ -47,6 +52,12 @@ export class ResponseService {
         };
 
         this.meta.next(meta);
+
+        const activeRequestTab = this._mainService.getActiveRequestTab();
+        activeRequestTab.payload.status_code = String(status);
+
+        this._mainService.saveRequestTab(activeRequestTab);
+        this._requestService.req.next(activeRequestTab);
     }
 
     getResponseSize(data: string) {

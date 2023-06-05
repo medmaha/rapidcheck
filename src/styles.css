@@ -7,25 +7,22 @@
 /* @import '~codemirror/lib/codemirror';
 @import '~codemirror/theme/material'; */
 
+
+@supports (scrollbar-width: thin) {
+    * {
+        scrollbar-width: thin;
+    }
+}
+
 @layer components {
 
-    body {
-        color: #fff;
-        background-color: #212121;
-        overflow-x: hidden
+
+    .surface {
+        @apply dark:bg-surface-dark dark:text-white text-black bg-white
     }
 
-    .bg {
-        @apply bg-gray-600;
-        color: hsl(215, 14%, 34%)
+    input {
+        min-width: 100px
     }
 
-
-    .bg-highlight {
-        @apply bg-[#212121]
-    }
-
-    .bg-highlight-light {
-        @apply bg-[#262626]
-    }
 }

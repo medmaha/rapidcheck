@@ -24,6 +24,20 @@ export function getMethodColor(method: string) {
     }
 }
 
+export function getStatusColor(status: number) {
+    switch (true) {
+        case status >= 400:
+            return 'text-red-500 text-opacity-90';
+        case status >= 300:
+            return 'text-yellow-500 text-opacity-90';
+        case status >= 200:
+            return 'text-green-500 text-opacity-90';
+
+        default:
+            return '';
+    }
+}
+
 export function getDummyRequestTab({
     active,
     collectionId,

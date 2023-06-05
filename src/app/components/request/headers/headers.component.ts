@@ -18,6 +18,10 @@ export class HeadersComponent implements OnInit, OnDestroy {
     constructor(private _mainService: MainService) {}
 
     ngOnInit(): void {
+        document.body.classList.toggle(
+            'dark',
+            localStorage.getItem('theme') === 'dark'
+        );
         this.subscription = this._mainService.collections.subscribe(
             (collections) => {
                 this.collection = collections.find((col: any) => col.active)!;
@@ -57,5 +61,13 @@ export class HeadersComponent implements OnInit, OnDestroy {
                 behavior: 'smooth',
             });
         }, 120);
+    }
+
+    toggleTheme() {
+        document.body.classList.toggle('dark');
+        localStorage.setItem(
+            'theme',
+            document.body.classList.contains('dark') ? 'dark' : 'light'
+        );
     }
 }

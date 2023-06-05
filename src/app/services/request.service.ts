@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CollectionArray, RequestTab } from '../models';
 import { BehaviorSubject } from 'rxjs';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { MainService } from './main.service';
 
 const axiosInstance = axios.create({});
 
@@ -41,6 +42,7 @@ axiosInstance.interceptors.response.use(
 })
 export class RequestService {
     constructor() {}
+    req = new BehaviorSubject({} as RequestTab);
 
     async send(data: any): Promise<AxiosResponse | AxiosError> {
         try {

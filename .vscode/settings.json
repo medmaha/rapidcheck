@@ -1,0 +1,8 @@
+{
+    "cSpell.words": ["codedeluxe"],
+
+    "[css]": {
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": false
+    }
+}

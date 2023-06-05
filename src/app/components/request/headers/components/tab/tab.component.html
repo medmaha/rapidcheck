@@ -3,11 +3,11 @@
     [class.active]="tab.active"
     [class.border-l]="idx !== 0"
     [class.border-r]="isLast"
-    [class.border-b]="!tab.active"
-    [class.border-b]="(idx === 0 && isLast) || !tab.active"
+    [class.border-b]="tab.active"
     style="box-sizing: border-box"
-    class="tab text-sm flex h-[40px] items-center px-1 border-gray-600 group relative before:z-20 overflow-hidden"
+    class="tab text-sm flex h-[40px] border-spacing-1 items-center px-1 border-gray-600 group relative before:z-20 overflow-hidden"
 >
+    <!-- [class.border-b]="(idx === 0 && isLast) || !tab.active" -->
     <button
         [title]="tab.name"
         (click)="onBodyClick()"

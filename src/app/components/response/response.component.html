@@ -1,4 +1,8 @@
-<div class="relative">
+<div
+    class="relative overflow-x-hidden"
+    [class.border-l]="fullscreen"
+    [class.border-muted-dim]="fullscreen"
+>
     <app-headings></app-headings>
     <app-editor #editor></app-editor>
     <div

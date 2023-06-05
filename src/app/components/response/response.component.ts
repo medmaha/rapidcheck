@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ResponseService } from '../../services/response.service';
 import { Subscription } from 'rxjs';
 
@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./response.component.css'],
 })
 export class ResponseComponent implements OnInit, OnDestroy {
+    @Input() fullscreen = false;
     subscription: Subscription | undefined;
-    constructor(private _responseService: ResponseService) {}
     loading = false;
+    constructor(private _responseService: ResponseService) {}
 
     ngOnInit(): void {
         this._responseService.loading.subscribe((value) => {
