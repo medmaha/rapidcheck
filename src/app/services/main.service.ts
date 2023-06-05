@@ -92,6 +92,43 @@ export class MainService {
         this.save(collections);
     }
 
+    removeCollection(id: string) {
+        const collections = this.getCollections();
+
+        if (collections.length === 1) return;
+
+        const targetCollection = collections.find((col) => col.id === id);
+
+        if (targetCollection) {
+            const tabs = targetCollection.tabs;
+
+            // Alert user for tab collection delete
+            if (tabs.length < 2) return;
+
+            const collectionIdx = collections.findIndex((col) => col.id === id);
+
+            const prev = collections[collectionIdx - 1];
+            const next = collections[collectionIdx + 1];
+
+            if (prev || (next && targetCollection.active)) {
+                this.deactivateAllCollectionsAndRequests(collections);
+                if (prev) {
+                    prev.active = true;
+                } else if (next) {
+                    next.active = true;
+                }
+            }
+
+            const _cols = collections.filter(
+                (col) => col.id !== targetCollection.id
+            );
+            this.collections.next(_cols);
+            this.save(_cols);
+
+            const tab = (prev || next).tabs[0];
+            this.switchActiveRequestTabs(tab);
+        }
+    }
     removeRequestTab(tab: RequestTab) {
         const collections = this.getCollections();
         const activeCollection = collections.find(

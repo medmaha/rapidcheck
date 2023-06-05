@@ -15,8 +15,8 @@
                     <button
                         (click)="toggleSpace()"
                         title="Close Panel"
-                        style="animation-iteration-count: 3"
-                        class="text-current animate-pulse duration-100 hover:text-sky-500 transition-all w-7 h-7 bg-muted inline-flex items-center justify-center rounded-md"
+                        style="animation-iteration-count: 2"
+                        class="text-current animate-pulse duration-[25ms] hover:text-sky-500 transition-all w-7 h-7 bg-muted dark:bg-muted-dark inline-flex items-center justify-center rounded-md"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@
                         </svg>
                     </button>
                 </div>
-                <div class="overflow-y-auto overflow-hidden max-h-[74.5%]">
+                <div class="overflow-y-auto overflow-hidden h-[74.5%]">
                     <app-history class="w-full"></app-history>
                     <app-collections class="w-full"></app-collections>
                 </div>

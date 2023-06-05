@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
     constructor(private _mainService: MainService) {}
 
     leftPanelSize = '60px';
-    fullSpace = false;
+    fullSpace = true;
 
     ngOnInit(): void {
         this._mainService.init();

@@ -1,5 +1,7 @@
-<div class="w-full">
-    <div class="flex items-center gap-2 justify-between w-full">
+<div class="w-full h-full">
+    <div
+        class="flex items-center h-full gap-2 justify-between w-full relative pb-2"
+    >
         <button
             (click)="toggleCollapse()"
             class="text-sm truncate inline-flex items-center gap-1 group"
@@ -35,7 +37,10 @@
             </span>
         </button>
 
-        <button class="opacity-80 hover:opacity-100 transition-all">
+        <button
+            (click)="toggleDropdown()"
+            class="opacity-80 hover:opacity-100 transition-all"
+        >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16px"
@@ -53,6 +58,57 @@
                 />
             </svg>
         </button>
+
+        <div
+            *ngIf="dropdown"
+            class="absolute mb-2 top-[50%] right-0 z-20 h-max rounded shadow bg-muted-dimmer dark:bg-muted-dark"
+        >
+            <ul class="flex flex-col gap-2 z-10 p-2">
+                <li
+                    class="inline-flex gap-6 items-center text-sm p-2 hover:bg-muted-dim dark:hover:bg-muted-dark-dim rounded-md"
+                >
+                    <button class="flex-1 text-left">Edit</button>
+                    <button>
+                        <svg
+                            class="fill-current"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            s
+                        >
+                            <path
+                                d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"
+                            />
+                        </svg>
+                    </button>
+                </li>
+                <li
+                    class="inline-flex gap-6 items-center text-sm p-2 hover:bg-muted-dim dark:hover:bg-muted-dark-dim rounded-md"
+                >
+                    <button
+                        (click)="deleteCollection()"
+                        class="flex-1 text-left"
+                    >
+                        Delete
+                    </button>
+                    <button (click)="deleteCollection()" class="text-red-500">
+                        <svg
+                            class="fill-current"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            s
+                        >
+                            <path
+                                d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"
+                            />
+                        </svg>
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="block relative" *ngIf="!collapsed">

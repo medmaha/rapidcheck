@@ -36,26 +36,27 @@
         </button>
     </div>
     <div *ngIf="histories.length && !collapsed" class="pl-2">
-        <div
-            class="flex gap-4 items-center hover:bg-muted transition rounded-sm rounded-l-md"
-            *ngFor="let history of histories"
-        >
+        <div class="flex gap-2 items-center" *ngFor="let history of histories">
             <button
                 (click)="activeHistory(history)"
-                class="text-xs truncate w-full flex-1 py-1 pl-2 cursor-pointer text-left inline-flex items-center gap-2"
+                class="text-xs w-full flex-1 p-2 cursor-pointer text-left inline-flex items-center gap-2 hover:bg-muted-dimmer dark:hover:bg-muted-dark-dimer transition rounded-md"
                 [class.text-sky-500]="history.active"
             >
                 <span [class]="_getMethodColor(history.payload.method)">{{
                     history.payload.method
                 }}</span>
-                <span class="text-xs flex-1">{{ history.name }}</span>
+                <span
+                    title="{{ history.name }}"
+                    class="text-xs flex-1 truncate inline-block max-w-[22ch]"
+                    >{{ history.name }}</span
+                >
                 <span
                     class="text-xs"
                     [class]="_getStatusColor(history.payload.status_code)"
                     >{{ history.payload.status_code }}</span
                 >
             </button>
-            <button title="delete" (click)="deleteHistory(history.historyId)">
+            <button title="Delete" (click)="deleteHistory(history.historyId)">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"

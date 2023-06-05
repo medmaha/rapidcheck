@@ -34,7 +34,7 @@
             </svg>
         </button>
     </div>
-    <div class="flex flex-col mt-1 w-full pl-2" *ngIf="!collapsed">
+    <div class="flex flex-col mt-1 w-full pl-2 h-max" *ngIf="!collapsed">
         <app-col-request
             *ngFor="let col of collections"
             [collection]="col"
