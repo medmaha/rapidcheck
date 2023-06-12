@@ -8,6 +8,21 @@
 @import '~codemirror/theme/material'; */
 
 
+::-webkit-scrollbar{
+    width: 12px;
+}
+
+::-webkit-scrollbar-thumb{
+    border-radius: 9px;
+    border: #999 1px solid;
+    background-color: #333;
+}
+
+::-webkit-scrollbar-track{
+    background-color: #999;
+}
+
+
 @supports (scrollbar-width: thin) {
     * {
         scrollbar-width: thin;

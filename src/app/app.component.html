@@ -9,7 +9,9 @@
             ></app-left-panel>
         </div>
         <div class="col-auto">
-            <app-headers></app-headers>
+            <app-headers
+                class="sticky top-0 z-20 bg-muted dark:bg-surface-dark"
+            ></app-headers>
             <app-tab-title></app-tab-title>
             <app-request></app-request>
             <app-response [fullscreen]="fullSpace"></app-response>
