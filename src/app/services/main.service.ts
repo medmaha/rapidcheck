@@ -13,7 +13,7 @@ export class MainService {
 
     collections = new BehaviorSubject([] as CollectionArray);
 
-    theme = new BehaviorSubject('light');
+    theme = new BehaviorSubject('dark');
 
     private COLLECTION_BUCKET_STRING = 'collections';
 
@@ -181,15 +181,17 @@ export class MainService {
 
             tab.updatedAt = Date.now().toString();
 
+            const requestTab = activeCollection.tabs[tabInx];
+
             if (activeCollection.tabs[tabInx]) {
-                activeCollection.tabs[tabInx] = { ...tab };
+                activeCollection.tabs[tabInx] = { ...requestTab, ...tab };
             } else {
-                activeCollection.tabs.unshift(tab);
+                activeCollection.tabs.unshift({ ...requestTab, ...tab });
             }
             activeCollection.updatedAt = Date.now().toString();
 
-            this.collections.next(collections);
             this.save(collections);
+            this.collections.next(collections);
         }
     }
 
@@ -228,8 +230,8 @@ export class MainService {
 
         collections.unshift(collection);
 
-        this.collections.next(collections);
         this.save(collections);
+        this.collections.next(collections);
 
         return collection;
     }
@@ -247,8 +249,8 @@ export class MainService {
 
         collections[collectionIdx] = payload;
 
-        this.collections.next(collections);
         this.save(collections);
+        this.collections.next(collections);
     }
 
     save(collections: CollectionArray) {

@@ -21,6 +21,8 @@ export class HeadingsComponent implements OnInit, OnDestroy {
 
     constructor(private _responseService: ResponseService) {}
 
+    activeTab = 'body';
+
     ngOnInit(): void {
         this.subscription = this._responseService.meta.subscribe((meta) => {
             this.metadata.size = meta.size;
@@ -28,10 +30,22 @@ export class HeadingsComponent implements OnInit, OnDestroy {
             this.metadata.time = meta.time;
             this.metadata.success = meta.success;
             this.requested = meta.requested;
+            this.activeTab = meta.activeTab;
         });
     }
 
     ngOnDestroy(): void {
         this.subscription?.unsubscribe();
+    }
+
+    changeResponseTab(tab: 'body' | 'headers') {
+        const meta = this._responseService.meta.value;
+
+        const __meta = {
+            ...meta,
+            activeTab: tab,
+        };
+        this._responseService.meta.next(__meta);
+        this.activeTab = tab;
     }
 }

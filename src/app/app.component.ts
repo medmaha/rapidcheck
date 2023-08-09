@@ -7,7 +7,7 @@ import { MainService } from './services/main.service';
     styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-    title = 'client';
+    title = 'RapidCheck';
 
     constructor(private _mainService: MainService) {}
 
@@ -18,12 +18,12 @@ export class AppComponent implements OnInit {
         this._mainService.init();
         this.changePanelSize();
 
-        const darkTheme = localStorage.getItem('theme') === 'dark';
+        // const darkTheme = localStorage.getItem('theme') === 'dark';
 
-        if (darkTheme) {
-            this._mainService.theme.next('dark');
-            document.body.classList.add('dark');
-        }
+        // if (darkTheme) {
+        // this._mainService.theme.next('dark');
+        //     document.body.classList.add('dark');
+        // }
     }
 
     toggleLeftPanel(open: boolean) {

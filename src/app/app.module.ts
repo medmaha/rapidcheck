@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { HeadersComponent } from './components/request/headers/headers.component';
 import { TabComponent } from './components/request/headers/components/tab/tab.component';
 import { TabTitleComponent } from './components/request/headers/components/tab-title/tab-title.component';
-import { SaveModalComponent } from './components/request/headers/components/save-modal/save-modal.component';
 import { RequestComponent } from './components/request/request.component';
 import { RequestPayloadComponent } from './components/request/components/request-payload/request-payload.component';
 
@@ -36,7 +35,6 @@ import { HeadingsComponent } from './components/response/components/headings/hea
         TabTitleComponent,
         RequestComponent,
         RequestPayloadComponent,
-        SaveModalComponent,
         CollectionsComponent,
         ColRequestComponent,
         ColRequestTabComponent,

@@ -1,6 +1,6 @@
 .tabs {
     overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-x: scroll ;
     scrollbar-width: 0;
 }
 

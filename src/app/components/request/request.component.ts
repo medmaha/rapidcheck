@@ -33,40 +33,6 @@ export class RequestComponent implements OnInit, OnDestroy {
         this.subscription?.unsubscribe();
     }
 
-    getFieldValues(containerId: string, wrapper: HTMLDivElement) {
-        const element = wrapper.querySelector(containerId)!;
-        const keyValueWrapper = element.querySelectorAll(
-            '[data-key-value-pairs]'
-        );
-        const data = {} as { [key: string]: any };
-        keyValueWrapper.forEach((pair) => {
-            const key = pair.querySelector('[data-key]')?.querySelector('input')
-                ?.value as string;
-            const value = pair
-                .querySelector('[data-value]')
-                ?.querySelector('input')?.value as string;
-
-            if (key) {
-                data[key] = value;
-            }
-        });
-        return data;
-    }
-
-    getParams(container: HTMLDivElement) {
-        return this.getFieldValues('#r-params', container);
-    }
-    getQuery(container: HTMLDivElement) {
-        return this.getFieldValues('#r-query', container);
-    }
-    getBody(container: HTMLDivElement) {
-        return this.getFieldValues('#r-body .formData', container);
-    }
-
-    getHeaders(container: HTMLDivElement) {
-        return this.getFieldValues('#r-headers', container);
-    }
-
     handleRequest(event: Event) {
         event.preventDefault();
         const formElement = event.currentTarget as HTMLFormElement;
@@ -79,36 +45,69 @@ export class RequestComponent implements OnInit, OnDestroy {
         this._responseService.loading.next(true);
         const form = new FormData(formElement);
 
-        const payloadsElement = document.getElementById(
-            'requestPayload'
-        ) as HTMLDivElement;
-
         const requestPayload = {
-            url: form.get('url'),
-            method: form.get('method'),
-            headers: this.getHeaders(payloadsElement),
-            queryParams: this.getParams(payloadsElement),
-            queryString: this.getQuery(payloadsElement),
-            data: this.getBody(payloadsElement),
-        } as RequestTab['payload'];
+            url: form.get('url')?.valueOf()! as string,
+            method: form.get('method')?.valueOf()! as string,
+        };
 
-        this.saveRequest(requestPayload);
+        const requestTab = this._mainService.getActiveRequestTab();
 
-        // this._requestService.update(requestPayload);
-    }
+        requestTab.payload = {
+            ...requestTab.payload,
+            ...requestPayload,
+        };
 
-    saveRequest(payload: RequestTab['payload']) {
-        const activeTab = this._mainService.getActiveRequestTab();
-        this._mainService.saveRequestTab({
-            ...activeTab,
-            payload: {
-                ...activeTab.payload,
-                ...payload,
-            },
-        });
+        this._mainService.saveRequestTab(requestTab);
+
+        const iter = (fields: any) => {
+            const data = {} as { [x: string]: string };
+            for (const field of fields || []) {
+                const { key, value } = field;
+                if (key) {
+                    data[key] = value;
+                }
+            }
+            return data;
+        };
+
+        const abstractPayload = () => {
+            let payload = { ...requestPayload } as any;
+            for (const tabPayload of requestTab.payload.data) {
+                switch (tabPayload.name) {
+                    case 'Body':
+                        payload.data = iter(tabPayload.fields);
+                        break;
+                    case 'Headers':
+                        payload.headers = iter(tabPayload.fields);
+                        break;
+                    case 'Query':
+                        const jsonQ = iter(tabPayload.fields);
+                        const entries = Object.entries(jsonQ);
+                        let url = ``;
+                        let i = 0;
+                        for (const entry of entries) {
+                            const [key, value] = entry;
+                            const nextQ = Boolean(entries[i + 1]);
+                            if (key && value)
+                                url += `${key}=${value}${nextQ ? '&' : ''}`;
+                            i++;
+                        }
+                        if (url.length > 0) {
+                            payload.url += `?${url}`;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return payload;
+        };
+
+        const payload = abstractPayload();
         this.makeRequest(payload);
     }
-    async makeRequest(payload: RequestTab['payload']) {
+
+    async makeRequest(payload: any) {
         const res = await this._requestService.send(payload);
         this.loading = false;
 

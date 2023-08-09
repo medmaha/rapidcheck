@@ -1,26 +1,26 @@
-<div
-    class="flex bg-muted dark:bg-surface-dark app-header bg-highlight gap-2 items-center border-t-2 border-b dark:border-t border-gray-600 h-max"
->
+<div class="sticky top-0 z-20 bg-muted dark:bg-surface-dark">
     <div
-        class="flex tabs flex-grow flex-shrink-0 max-h-[40px] dark:border-x border-r border-gray-600 items-center"
+        class="grid grid-cols-[auto,50px] bg-muted dark:bg-surface-dark app-header bg-highlight gap-2 items-center border-t-2 border-b dark:border-t border-gray-600 h-max"
     >
         <div
-            *ngFor="let tab of collection.tabs.reverse(); let i = index"
-            class="flex-1 max-w-[200px]"
+            class="flex min-w-max flex-grow tabs flex-shrink-0 max-h-[40px] dark:border-x border-r border-gray-600 items-center"
         >
-            <app-tab
-                class=""
-                [idx]="i"
-                [tab]="tab"
-                [isLast]="!collection.tabs[i + 1]"
-                (tabClicked)="handleTabClick(tab)"
-                (closeTab)="handleTabClose($event)"
+            <div
+                *ngFor="let tab of collection.tabs.reverse(); let i = index"
+                class="flex-1 max-w-[200px] w-full"
             >
-            </app-tab>
+                <app-tab
+                    class=""
+                    [idx]="i"
+                    [tab]="tab"
+                    [isLast]="!collection.tabs[i + 1]"
+                    (tabClicked)="handleTabClick(tab)"
+                    (closeTab)="handleTabClose($event)"
+                >
+                </app-tab>
+            </div>
         </div>
-    </div>
-    <div class="flex gap-2 min-w-[100px] justify-evenly">
-        <div class="add-tab flex h-full items-center w-max">
+        <div class="add-tab flex h-full items-center pr-1">
             <button
                 (click)="addTab()"
                 class="inline-flex justify-center items-center bg-transparent dark:hover:bg-muted-dark-dim hover:bg-muted-dim w-8 h-8 rounded-md font-semibold transition"
@@ -36,39 +36,6 @@
                 </svg>
             </button>
         </div>
-        <div class="add-tab flex h-full items-center">
-            <button
-                title="{{ darkTheme ? 'Light Mood' : 'Night Mood' }}"
-                (click)="toggleTheme()"
-                class="inline-flex justify-center items-center bg-transparent dark:hover:bg-muted-dark-dim hover:bg-muted-dim w-8 h-8 rounded-md font-semibold transition"
-            >
-                <svg
-                    *ngIf="!darkTheme"
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20px"
-                    viewBox="0 0 24 24"
-                    width="20px"
-                    fill="currentColor"
-                >
-                    <rect fill="none" height="24" width="24" />
-                    <path
-                        d="M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26 c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"
-                    />
-                </svg>
-
-                <svg
-                    *ngIf="darkTheme"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                >
-                    <path
-                        d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"
-                    />
-                </svg>
-            </button>
-        </div>
     </div>
 </div>
+<app-tab-title></app-tab-title>

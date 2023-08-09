@@ -1,8 +1,4 @@
-interface KeyValuePair {
-    [key: string]: any;
-}
-
-export interface RequestTab {
+export type RequestTab = {
     id: string;
     name: string;
     description: string;
@@ -13,10 +9,23 @@ export interface RequestTab {
     payload: {
         url: string;
         method: string;
-        headers: KeyValuePair;
-        queryString: KeyValuePair;
-        queryParams: KeyValuePair;
-        data?: KeyValuePair;
+        data: TabPayload[];
         status_code: string;
     };
-}
+};
+
+export type TabPayloadField = {
+    key?: string;
+    value?: string;
+    description?: string;
+    autoFucus: boolean;
+};
+
+export type TabPayload = {
+    name: 'Params' | 'Headers' | 'Body' | 'Query';
+    title: string;
+    editorId: string;
+    active: boolean;
+    fields: TabPayloadField[];
+    id: string;
+};

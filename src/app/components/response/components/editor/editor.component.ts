@@ -20,6 +20,8 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     editor: CodeMirror.EditorFromTextArea | null = null;
 
+    data: any | undefined;
+
     constructor(
         private _responseService: ResponseService,
         private _mainService: MainService
@@ -27,15 +29,33 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.subscriptions = [];
-
         this.subscriptions[0] = this._responseService.data.subscribe(
             (value) => {
+                this.data = value;
                 if (typeof value === 'string') {
                     this.content = value;
                     this.language = 'xml';
                 } else {
                     this.language = 'javascript';
                     this.content = JSON.stringify(value, null, 2);
+                }
+                this.updateResponseContent();
+            }
+        );
+        this.subscriptions[1] = this._responseService.meta.subscribe(
+            (value) => {
+                if (value.activeTab === 'headers') {
+                    this.language = 'javascript';
+                    this.content = JSON.stringify(value.header, null, 2);
+                }
+                if (value.activeTab === 'body') {
+                    if (typeof this.data === 'string') {
+                        this.content = this.data;
+                        this.language = 'xml';
+                    } else {
+                        this.language = 'javascript';
+                        this.content = JSON.stringify(this.data || {}, null, 2);
+                    }
                 }
                 this.updateResponseContent();
             }

@@ -16,9 +16,9 @@ module.exports = {
                     dim: "hsl(220, 50%, 95%)",
                     dimmer: "hsl(220, 50%, 85%)",
                     dark: {
-                        DEFAULT: "hsl(215, 20%, 60%)",
-                        dim: "hsl(215, 14%, 30%)",
-                        dimer: "hsl(215, 14%, 24%)",
+                        DEFAULT: "hsla(216, 17%, 23%, 0.96)",
+                        dim: "hsla(0, 0%, 45%, 0.196)",
+                        dimer: "hsla(0, 0%, 35%, 0.196)",
                     },
                 },
             },

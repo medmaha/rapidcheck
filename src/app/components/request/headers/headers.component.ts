@@ -13,7 +13,7 @@ export class HeadersComponent implements OnInit, OnDestroy {
     collection = {} as Collection;
 
     timeout: any | undefined;
-    darkTheme = false;
+    darkTheme = true;
     private subscription: Subscription[] | undefined;
 
     constructor(private _mainService: MainService) {}
@@ -29,9 +29,9 @@ export class HeadersComponent implements OnInit, OnDestroy {
                 this.collection = collections.find((col: any) => col.active)!;
             }
         );
-        this.subscription[1] = this._mainService.theme.subscribe((theme) => {
-            this.darkTheme = theme === 'dark';
-        });
+        // this.subscription[1] = this._mainService.theme.subscribe((theme) => {
+        //     this.darkTheme = theme === 'dark';
+        // });
     }
 
     ngOnDestroy(): void {
@@ -39,8 +39,16 @@ export class HeadersComponent implements OnInit, OnDestroy {
     }
 
     addTab() {
-        this._mainService.addRequestTab();
-        this.scrollToLastTab();
+        const activeCollection = this._mainService.getActiveCollection();
+
+        if (activeCollection.tabs.length < 10) {
+            this._mainService.addRequestTab();
+            this.scrollToLastTab();
+        } else {
+            alert(
+                '                [Operation Error]\nYou have reach the max Tab count'
+            );
+        }
     }
 
     handleTabClick(tab: RequestTab) {

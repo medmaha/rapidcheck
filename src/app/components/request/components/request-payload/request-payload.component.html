@@ -1,7 +1,7 @@
-<div class="payload-tabs px-4">
+<div class="payload-tabs px-4" *ngIf="activePayloadTab">
     <div class="tabs flex items-center gap-4 sm:gap-8 lg:gap-10">
         <button
-            *ngFor="let tab of tabs; let i = index"
+            *ngFor="let tab of payloadTabs; let i = index"
             class="tracking-wider tab dark:text-gray-300 text-gray-700"
             [class.active]="tab.active"
             (click)="handleChangeTab(tab)"
@@ -11,13 +11,13 @@
     </div>
 
     <div
-        *ngFor="let tab of tabs; let i = index"
+        *ngFor="let tab of payloadTabs; let i = index"
         [class.hidden]="!tab.active"
         class="pt-4"
         [id]="tab.id"
     >
         <div class="title text-gray-700 dark:text-gray-400 pb-2">
-            <p>{{ activeTab.title }}</p>
+            <p>{{ activePayloadTab.title }}</p>
         </div>
 
         <div
@@ -26,7 +26,10 @@
         >
             <div
                 [class.hidden]="!tab.active"
-                *ngFor="let _tab of activeTab.fields; let i = index"
+                *ngFor="
+                    let activePayloadTabField of activePayloadTab.fields;
+                    let i = index
+                "
                 class="flex items-center border-gray-500 dark:border-muted-dark-dim"
                 [class.border-b]="!!tab.fields[i + 1]"
                 data-key-value-pairs
@@ -57,12 +60,12 @@
                     >
                     <div class="inline-flex items-center h-full p-2 w-full">
                         <input
+                            (input)="handleInputFieldInput($event, i)"
+                            (change)="handleInputFieldChange()"
                             type="text"
-                            [value]="_tab.key"
+                            name="key"
+                            [value]="activePayloadTabField.key"
                             class="p-1 self-center"
-                            (input)="
-                                ngModelChange(activeTab.id, i, true, $event)
-                            "
                             class="bg-transparent w-full focus:bg-muted-dim dark:focus:bg-muted-dark-dim px-1 focus:bottom-0 focus:outline-0"
                             placeholder="key"
                         />
@@ -80,11 +83,11 @@
                     >
                     <div class="inline-flex items-center h-full p-2 w-full">
                         <input
+                            (input)="handleInputFieldInput($event, i)"
+                            (change)="handleInputFieldChange()"
                             type="text"
-                            (input)="
-                                ngModelChange(activeTab.id, i, false, $event)
-                            "
-                            [value]="_tab.value"
+                            name="value"
+                            [value]="activePayloadTabField.value"
                             class="p-1 self-center"
                             class="bg-transparent w-full focus:bg-muted-dim dark:focus:bg-muted-dark-dim px-1 focus:bottom-0 focus:outline-0"
                             placeholder="Value"
@@ -99,12 +102,12 @@
                     >
                     <div class="inline-flex items-center h-full p-2 w-full">
                         <input
+                            (input)="handleInputFieldInput($event, i)"
+                            (change)="handleInputFieldChange()"
                             type="text"
+                            name="description"
                             class="p-1 self-center"
-                            (input)="
-                                ngModelChange(activeTab.id, i, null, $event)
-                            "
-                            [value]="_tab.description || ''"
+                            [value]="activePayloadTabField.description || ''"
                             class="bg-transparent w-full outline-gray-300 focus:bg-muted-dim dark:focus:bg-muted-dark-dim px-1 focus:bottom-0 focus:outline-0"
                             placeholder="Description"
                         />

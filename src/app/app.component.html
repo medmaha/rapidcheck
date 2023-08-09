@@ -1,4 +1,4 @@
-<div class="min-h-[100vh] min-w-[99vw]">
+<div class="">
     <div class="grid {{ leftPanelSize }} h-full">
         <div class="w-full h-full">
             <app-left-panel
@@ -9,12 +9,12 @@
             ></app-left-panel>
         </div>
         <div class="col-auto">
-            <app-headers
-                class="sticky top-0 z-20 bg-muted dark:bg-surface-dark"
-            ></app-headers>
-            <app-tab-title></app-tab-title>
+            <app-headers class=""></app-headers>
+            <!-- <app-tab-title></app-tab-title> -->
             <app-request></app-request>
-            <app-response [fullscreen]="fullSpace"></app-response>
+            <div id="_responseElement" class="">
+                <app-response [fullscreen]="fullSpace"></app-response>
+            </div>
         </div>
     </div>
 </div>

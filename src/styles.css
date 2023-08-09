@@ -9,8 +9,14 @@
 
 
 ::-webkit-scrollbar{
+  
     width: 12px;
 }
+
+#_responseElement *{
+   overflow-x: hidden;
+}
+
 
 ::-webkit-scrollbar-thumb{
     border-radius: 9px;

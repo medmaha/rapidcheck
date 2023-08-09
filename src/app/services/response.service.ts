@@ -22,27 +22,42 @@ export class ResponseService {
 
     async abstractResponse(res: AxiosError | AxiosResponse) {
         if (res instanceof AxiosError) {
-            const { response, request, message } = res;
+            const { response, request } = res;
             if (response) {
                 this.dispatchMetaData(response, false);
-            } else if (request) {
-                const status = request.status || 406;
-                const statusText = 'Bad Format';
-                console.log(message);
+                return;
             }
-        } else {
-            this.dispatchMetaData(res);
+            if (request) {
+                const status = request.status || 408;
+                const payload = {
+                    ...res,
+                    status,
+                    statusText: res.message,
+                    data: { Reason: res.message },
+                };
+                this.dispatchMetaData(payload, false);
+                return;
+            }
+            this.dispatchMetaData(
+                { ...res, data: { Reason: res.message } },
+                false
+            );
+            return;
         }
+        if (res.status < 300) {
+            this.dispatchMetaData(res);
+            return;
+        }
+        this.dispatchMetaData(res, false);
     }
     dispatchMetaData(payload: any, success = true) {
         const { data, config, status, statusText, headers } = payload;
         const meta = {} as Meta;
-        this.data.next(data);
 
         meta.data = data;
         meta.requested = true;
         meta.success = success;
-        // @ts-ignore
+        meta.activeTab = 'body';
         meta.time = this.getResponseTime(payload.duration || 0);
         meta.size = this.getResponseSize(JSON.stringify(data));
         meta.status = this.getResponseStatus(status, statusText);
@@ -51,6 +66,7 @@ export class ResponseService {
             ...headers,
         };
 
+        this.data.next(data);
         this.meta.next(meta);
 
         const activeRequestTab = this._mainService.getActiveRequestTab();
@@ -63,18 +79,22 @@ export class ResponseService {
     getResponseSize(data: string) {
         let bytes = 0;
 
-        const itr = data.split('');
+        try {
+            const itr = (data || '').split('');
 
-        itr.forEach(() => bytes++);
+            itr.forEach(() => bytes++);
 
-        if (bytes > 100) {
-            const kb = `${(bytes / 1000).toFixed(1)} kb`;
+            if (bytes > 100) {
+                const kb = `${(bytes / 1000).toFixed(1)} kb`;
+
+                return kb;
+            }
+            const kb = `${bytes} bytes`;
 
             return kb;
+        } catch (error) {
+            return '0';
         }
-        const kb = `${bytes} bytes`;
-
-        return kb;
     }
     getResponseTime(duration: number) {
         const ms = `${duration} ms`;
@@ -96,6 +116,7 @@ interface Meta {
     time: string;
     size: string;
     header: KeyValuePair;
+    activeTab: 'body' | 'headers';
 }
 
 type KeyValuePair = { [key: string]: string };

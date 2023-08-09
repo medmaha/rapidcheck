@@ -30,7 +30,7 @@ export class CodemirrorComponent implements AfterViewInit, OnDestroy {
         this.editor = CodeMirror.fromTextArea(this.textarea.nativeElement, {
             mode: 'xml',
             readOnly: 'nocursor',
-            theme: 'eclipse',
+            theme: 'ayu-dark',
             lineNumbers: true,
         });
     }
@@ -41,19 +41,18 @@ export class CodemirrorComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit(): void {
         this.init();
-        this.subscription = this._mainService.theme.subscribe((t) => {
-            console.log(t);
-            switch (t) {
-                case 'light':
-                    this.setEditorTheme('eclipse');
-                    break;
-                case 'dark':
-                    this.setEditorTheme('ayu-dark');
-                    break;
-                default:
-                    break;
-            }
-        });
+        // this.subscription = this._mainService.theme.subscribe((t) => {
+        //     switch (t) {
+        //         case 'light':
+        //             this.setEditorTheme('eclipse');
+        //             break;
+        //         case 'dark':
+        //             this.setEditorTheme('ayu-dark');
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        // });
     }
 
     setEditorContent(content: string, language: string): void {
@@ -63,7 +62,7 @@ export class CodemirrorComponent implements AfterViewInit, OnDestroy {
     }
 
     setEditorTheme(theme: 'ayu-dark' | 'eclipse'): void {
-        this.editor.setOption('theme', theme);
-        this.editor.refresh();
+        // this.editor.setOption('theme', theme);
+        // this.editor.refresh();
     }
 }

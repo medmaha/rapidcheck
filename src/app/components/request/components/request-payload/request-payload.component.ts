@@ -1,9 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestTab } from '../../../../models';
 import { MainService } from '../../../../services/main.service';
-
-let _activeTab = {} as Tab;
+import { TabPayload, TabPayloadField } from '../../../../models/request';
 
 @Component({
     selector: 'app-request-payload',
@@ -11,145 +10,178 @@ let _activeTab = {} as Tab;
     styleUrls: ['./request-payload.component.css'],
 })
 export class RequestPayloadComponent implements OnInit, OnDestroy {
-    tabs = initTabs();
+    payloadTabs: TabPayload[] = [];
 
-    activeTab = (_activeTab.title && _activeTab) || this.tabs[0];
+    activePayloadTab: TabPayload | undefined;
 
     currentRequestTab = {} as RequestTab;
+
     subscription: Subscription | undefined;
 
     constructor(private _mainService: MainService) {}
 
-    handleChangeTab(tab: Tab) {
-        this.activeTab = tab;
-        _activeTab = tab;
-        this.switchActiveTab();
+    dispatchActiveTabPayload(tab: TabPayload, payloads?: TabPayload[]) {
+        if (!payloads) {
+            payloads = Array.of(...this.payloadTabs);
+        }
+        const matchedPayload = payloads.find((p) => p.id === tab.id);
+
+        if (matchedPayload) {
+            const matchedPayloadIndex = payloads.findIndex(
+                (p) => p.id === tab.id
+            );
+
+            this.deactivateAllTabs(payloads);
+
+            const _data = {
+                ...matchedPayload,
+                ...tab,
+                fields: [...matchedPayload.fields],
+                active: true,
+            };
+            payloads[matchedPayloadIndex] = _data;
+        }
+
+        return payloads;
+    }
+
+    handleChangeTab(tab: TabPayload) {
+        this.payloadTabs = this.dispatchActiveTabPayload(tab);
+        this.activePayloadTab = this.payloadTabs.find((p) => p.active);
+        localStorage.setItem(
+            'a-tab-payload',
+            JSON.stringify(this.activePayloadTab)
+        );
+    }
+
+    getActiveTab() {
+        this.activePayloadTab = this.payloadTabs.find((p) => p.active);
+        localStorage.setItem(
+            'a-tab-payload',
+            JSON.stringify(this.activePayloadTab)
+        );
+        localStorage.setItem('a-req', this.currentRequestTab.id);
     }
 
     ngOnInit(): void {
         this.subscription = this._mainService.collections.subscribe((value) => {
-            this.currentRequestTab = this._mainService.getActiveRequestTab();
+            this.currentRequestTab =
+                this._mainService.getActiveRequestTab(value);
 
-            const { queryParams, queryString, headers, data } =
-                this.currentRequestTab.payload;
+            const payloads = this.currentRequestTab.payload.data;
+            const storeActivePayloadTab = localStorage.getItem('a-tab-payload');
+            const sameRequestTab =
+                this.currentRequestTab.id === localStorage.getItem('a-req');
 
-            function abstractData(_tab: Tab, data: { [key: string]: string }) {
-                Object.entries(data).forEach((entry, i) => {
-                    const [key, value] = entry;
-                    if (_tab.fields[i]) {
-                        _tab.fields[i] = { key, value };
-                    } else _tab.fields.push({ key, value });
-                });
+            if (!!storeActivePayloadTab) {
+                const json: TabPayload = JSON.parse(
+                    storeActivePayloadTab || '{}'
+                );
+                const __payloads = this.dispatchActiveTabPayload(
+                    json,
+                    payloads
+                );
+                this.payloadTabs = __payloads;
+            } else {
+                localStorage.removeItem('a-tab-payload');
+                const __payloads = this.dispatchActiveTabPayload(
+                    payloads[0],
+                    payloads
+                );
+                this.payloadTabs = __payloads;
             }
 
-            this.tabs = initTabs().filter((_tab) => {
-                sw: switch (_tab.name) {
-                    case 'Params':
-                        abstractData(_tab, queryParams);
-                        break sw;
-                    case 'Query':
-                        abstractData(_tab, queryString);
-                        break sw;
-                    case 'Body':
-                        if (data) abstractData(_tab, data);
-                        break sw;
-                    case 'Headers':
-                        abstractData(_tab, headers);
-                        break sw;
-                    default:
-                        break sw;
-                }
-
-                return _tab;
-            });
+            if (!sameRequestTab) {
+                if (this.activePayloadTab) this.getActiveTab();
+            }
         });
+
+        this.getActiveTab();
     }
 
     ngOnDestroy(): void {
         this.subscription?.unsubscribe();
-        this.tabs = initTabs();
     }
 
     addNewField() {
-        this.activeTab.fields.push(newFields());
-    }
-
-    switchActiveTab() {
-        const activeTab = this.tabs.find((_tab) => _tab.active);
-
-        console.log(activeTab);
-
-        if (activeTab) {
-            activeTab.active = false;
+        const field = { key: '', value: '', description: '', autoFucus: false };
+        if (this.activePayloadTab) {
+            this.activePayloadTab.fields.push(field);
         }
-        this.activeTab.active = true;
     }
 
-    ngModelChange(
-        tabId: string,
-        idx: number,
-        isKey: boolean | null,
-        event: Event
-    ) {
-        const value = (event.target as HTMLInputElement).value;
-        const tab = this.tabs.find((tab) => tab.id === tabId)!;
-        if (isKey === null) {
-            tab.fields[idx].description = value;
-        } else if (isKey) {
-            tab.fields[idx]['key'] = value;
-        } else tab.fields[idx]['value'] = value;
+    deactivateAllTabs(data: TabPayload[]) {
+        data.forEach((t) => (t.active = false));
     }
-}
 
-function newFields(active = false): Field {
-    return { key: '', value: '', description: '' };
-}
+    handleInputFieldInput(event: any, fieldIndex: number) {
+        const input = event.target as HTMLInputElement;
 
-type Field = { key?: string; value?: string; description?: string };
+        const { value } = input;
+        const name = input.name as keyof TabPayloadField;
 
-type Tab = {
-    name: string;
-    title: string;
-    editorId: string;
-    active: boolean;
-    fields: Field[];
-    id: string;
-};
+        if (this.activePayloadTab) {
+            const field = this.activePayloadTab.fields[fieldIndex];
+            if (field)
+                // @ts-ignore
+                field[name] = value.trim();
+        }
+    }
 
-function initTabs() {
-    const f = () => ({ key: '', value: '', description: '' });
-    return [
-        {
-            name: 'Params',
-            title: 'Query Params',
-            editorId: 'queryTab',
-            active: true,
-            id: 'r-params',
-            fields: [f(), f()],
-        },
-        {
-            name: 'Headers',
-            title: 'Request Headers',
-            editorId: 'headerTab',
-            active: false,
-            id: 'r-headers',
-            fields: [f(), f()],
-        },
-        {
-            name: 'Body',
-            title: 'Headers Body',
-            editorId: 'bodyTab',
-            active: false,
-            id: 'r-body',
-            fields: [f(), f()],
-        },
-        {
-            name: 'Query',
-            title: 'Query String',
-            editorId: 'bodyTab',
-            active: false,
-            id: 'r-query',
-            fields: [f(), f()],
-        },
-    ] as Tab[];
+    handleInputFieldChange() {
+        const activePayload = this.activePayloadTab;
+        const currentData = {
+            ...this.currentRequestTab,
+            payload: {
+                ...this.currentRequestTab.payload,
+                data: [...this.currentRequestTab.payload.data],
+            },
+        } as RequestTab;
+
+        if (activePayload) {
+            const activeTabIndex = currentData.payload.data.findIndex(
+                (t) => t.id === activePayload.id
+            );
+
+            if (activeTabIndex)
+                currentData.payload.data[activeTabIndex] = activePayload;
+        }
+
+        this._mainService.saveRequestTab(currentData);
+    }
+
+    getFieldValues(containerId: string, ContainerWrapper: HTMLDivElement) {
+        const element = ContainerWrapper.querySelector(containerId)!;
+        const keyValueWrapper = element.querySelectorAll(
+            '[data-key-value-pairs]'
+        );
+        const data = {} as { [key: string]: any };
+
+        keyValueWrapper.forEach((pair) => {
+            const key = pair.querySelector('[data-key]')?.querySelector('input')
+                ?.value as string;
+            const value = pair
+                .querySelector('[data-value]')
+                ?.querySelector('input')?.value as string;
+
+            if (key) {
+                data[key] = value;
+            }
+        });
+        return data;
+    }
+
+    getParams(container: HTMLDivElement) {
+        return this.getFieldValues('#r-params', container);
+    }
+    getQuery(container: HTMLDivElement) {
+        return this.getFieldValues('#r-query', container);
+    }
+    getBody(container: HTMLDivElement) {
+        return this.getFieldValues('#r-body .formData', container);
+    }
+
+    getHeaders(container: HTMLDivElement) {
+        return this.getFieldValues('#r-headers', container);
+    }
 }
