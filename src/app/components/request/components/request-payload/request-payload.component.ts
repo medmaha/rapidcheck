@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { RequestTab } from '../../../../models';
 import { MainService } from '../../../../services/main.service';
 import { TabPayload, TabPayloadField } from '../../../../models/request';
+import { initialTabPayload } from '../../../utils/request';
 
 @Component({
     selector: 'app-request-payload',
@@ -10,7 +11,7 @@ import { TabPayload, TabPayloadField } from '../../../../models/request';
     styleUrls: ['./request-payload.component.css'],
 })
 export class RequestPayloadComponent implements OnInit, OnDestroy {
-    payloadTabs: TabPayload[] = [];
+    payloadTabs: TabPayload[] = initialTabPayload();
 
     activePayloadTab: TabPayload | undefined;
 

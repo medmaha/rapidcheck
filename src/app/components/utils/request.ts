@@ -79,7 +79,7 @@ type TabPayload = {
     id: string;
 };
 
-function initialTabPayload(): TabPayload[] {
+export function initialTabPayload(): TabPayload[] {
     const f = () => ({ key: '', value: '', description: '', autoFucus: false });
     return [
         {

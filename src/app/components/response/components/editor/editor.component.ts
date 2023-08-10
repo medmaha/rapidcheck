@@ -11,12 +11,12 @@ import { MainService } from '../../../../services/main.service';
     styleUrls: ['./editor.component.css'],
 })
 export class EditorComponent implements OnInit, OnDestroy {
+    @Input() content = '' as string;
     @ViewChild('cmEditor') cmEditor!: CodemirrorComponent;
 
     theme: 'ayu-dark' | 'eclipse' = 'eclipse';
     language: 'javascript' | 'xml' = 'javascript';
     subscriptions: Subscription[] | undefined;
-    @Input() content = '' as string;
 
     editor: CodeMirror.EditorFromTextArea | null = null;
 

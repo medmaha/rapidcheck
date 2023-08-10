@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MainService } from './services/main.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { MainService } from './services/main.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     title = 'RapidCheck';
 
     constructor(private _mainService: MainService) {}
@@ -14,16 +14,32 @@ export class AppComponent implements OnInit {
     leftPanelSize = '60px';
     fullSpace = false;
 
+    screenSize = 0;
+    resizeTimeout: any;
+
+    handleScreenSize() {
+        this.screenSize = window.innerWidth;
+
+        // if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
+
+        if (this.screenSize < 650)
+            alert('Your device width is a bit small for this web-app');
+        // this.resizeTimeout = setTimeout(() => {
+        //     if (this.screenSize < 650)
+        //         alert('Your device width is a bit small for this web-app');
+        //     else clearTimeout(this.resizeTimeout);
+        // }, 3000);
+    }
+
     ngOnInit(): void {
         this._mainService.init();
         this.changePanelSize();
+        // window.addEventListener('resize', this.handleScreenSize);
+        this.handleScreenSize();
+    }
 
-        // const darkTheme = localStorage.getItem('theme') === 'dark';
-
-        // if (darkTheme) {
-        // this._mainService.theme.next('dark');
-        //     document.body.classList.add('dark');
-        // }
+    ngOnDestroy(): void {
+        window.addEventListener('resize', this.handleScreenSize);
     }
 
     toggleLeftPanel(open: boolean) {

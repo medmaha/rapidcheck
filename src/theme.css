@@ -22,6 +22,7 @@
 }
 
 .cm-s-ayu-dark .CodeMirror-gutters {
+    color:white;
     background: hsla(0, 0%, 35%, 0.196);
     border-right: 0px;
 }

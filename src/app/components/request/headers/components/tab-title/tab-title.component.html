@@ -18,7 +18,9 @@
                 ></path>
             </svg>
         </span>
-        <p class="text-xl tracking-wide">{{ tab.name }}</p>
+        <p (click)="toggleSave()" class="text-xl tracking-wide">
+            {{ tab.name }}
+        </p>
     </div>
     <div class="title flex gap-1 items-center">
         <button
